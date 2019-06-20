@@ -2,7 +2,7 @@
 A client-side only patch mod for Portal Gun by iChun.  
 It fixes item rendering by forcing default non-emmissive item rendering on portal guns.
 ## Setup for users
-![](https://cf.way2muchnoise.eu/versions/324827.svg)    
+![](http://cf.way2muchnoise.eu/324827.svg)]  
 Simply download the mod from [here](https://minecraft.curseforge.com/projects/portal-gun-fixer) and drag and drop it into your mods directory.   
 ## Setup for developers
 Use your favourite Git client or the terminal to clone this repository.   
