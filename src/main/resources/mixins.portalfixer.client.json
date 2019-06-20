@@ -1,0 +1,15 @@
+
+{
+  "package": "de.kitsunealex.portalfixer.mixin.client",
+  "required": true,
+  "refmap": "mixins.portalfixer.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.6",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinRenderItem"
+  ],
+  "injectors": {
+    "maxShiftBy": 10
+  }
+}

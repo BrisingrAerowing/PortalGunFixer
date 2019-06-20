@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "portalfixer",
+    "name": "Portal Gun Fixer",
+    "description": "Fixes Portal Gun item rendering introduced due to a patch in Forge build 2781.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "http://twitter.com/kitsune_alex_",
+    "updateUrl": "",
+    "authorList": ["KitsuneAlex"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

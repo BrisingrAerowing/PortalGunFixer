@@ -1,0 +1,124 @@
+buildscript {
+    def properties = new Properties()
+    file('build.properties').withInputStream { properties.load(it) }
+    project.ext.config = properties
+
+    repositories {
+        jcenter()
+        maven { url 'http://files.minecraftforge.net/maven' }
+        maven { url 'http://repo.spongepowered.org/maven' }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:${config.shadow_version}"
+        classpath "net.minecraftforge.gradle:ForgeGradle:${config.forge_gradle_version}"
+        classpath "org.spongepowered:mixingradle:${config.mixin_gradle_version}"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+
+version = '0.0.1'
+group = 'de.kitsunealex.portalfixer'
+archivesBaseName = 'PortalGunFixer'
+sourceCompatibility = targetCompatibility = config.java_version
+
+compileJava {
+    sourceCompatibility = targetCompatibility = config.java_version
+}
+
+sourceSets {
+    main
+}
+
+minecraft {
+    version = "${config.mc_version}-${config.forge_version}"
+    runDir = '.minecraft'
+    mappings = config.obf_mappings
+    makeObfSourceJar = false
+    useDepAts = true
+    def args = [
+            '-Dfml.coreMods.load=de.kitsunealex.portalfixer.PGFLoadingPlugin',
+            '-Dmixin.hotSwap=true',
+            '-Dmixin.checks.interfaces=true',
+            '-Dmixin.debug.export=true'
+    ]
+    clientJvmArgs.addAll(args)
+    serverJvmArgs.addAll(args)
+}
+
+mixin {
+    add sourceSets.main, "mixins.portalfixer.refmap.json"
+}
+
+reobf {
+    shadowJar {
+        mappingType = "SEARGE"
+    }
+}
+
+repositories {
+    maven { url 'http://repo.spongepowered.org/maven' }
+    maven { url "http://www.dimdev.org/maven" }
+
+    ivy {
+        url 'https://google.com/404'
+        ivyPattern('https://google.com/404') // Workaround for https://github.com/gradle/gradle/issues/4107
+        artifactPattern('https://media.forgecdn.net/files/[organisation]/[module]/[revision].[ext]')
+    }
+}
+
+dependencies {
+    implementation("org.dimdev:mixin:${config.mixin_version}") {
+        exclude module: 'asm-commons'
+        exclude module: 'asm-tree'
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'log4j-core'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+    }
+}
+
+processResources {
+    filesMatching('*.info') {
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+}
+
+jar {
+    classifier 'thin'
+    manifest.attributes(
+            'FMLCorePlugin': 'de.kitsunealex.portalfixer.PGFLoadingPlugin',
+            'FMLCorePluginContainsFMLMod': true
+    )
+}
+
+shadowJar {
+    classifier ''
+    exclude 'LICENSE.txt', 'dummyThing', 'me/', 'eula.txt', 'META-INF/*.cfg', 'assets/'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+tasks.build.dependsOn shadowJar
+
+artifacts {
+    archives jar
+    archives shadowJar
+    archives sourcesJar
+}
+
+tasks.reobfShadowJar.mustRunAfter shadowJar
+tasks.build.dependsOn reobfShadowJar
+//These are broken, thanks to the DimDev team for finding that out <3
+runClient.group 'other'
+runServer.group 'other'
