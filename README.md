@@ -1,5 +1,4 @@
-# ![](https://cf.way2muchnoise.eu/versions/324827.svg)
-![](https://cf.way2muchnoise.eu/versions/324827.svg) ![](https://cf.way2muchnoise.eu/full_324827_downloads.svg)  
+# Portal Gun Fixer 
 A client-side only patch mod for Portal Gun by iChun.  
 It fixes item rendering by forcing default non-emmissive item rendering on portal guns.
 ## Setup for users 
