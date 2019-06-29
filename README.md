@@ -18,4 +18,10 @@ chmod +x ./gradlew
 No we wanna set up the workspace.   
 ```SH
 ./gradlew sDecW <idea|eclipse>
-```
+```   
+## Support me   
+<html>
+    <a href="https://www.patreon.com/bePatron?u=4475031">
+      <image src="https://i.imgur.com/6hcs6sJ.png" width="20%" height="5%"></image>
+    </a>
+</html>
